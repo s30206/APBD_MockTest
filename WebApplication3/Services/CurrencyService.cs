@@ -72,7 +72,7 @@ public class CurrencyService : ICurrencyService
                 }
                 else
                 {
-                    sqlQuery = "SELECT COALESCE(MAX(Id), 1) FROM CURRENCY";
+                    sqlQuery = "SELECT COALESCE(MAX(Id), 0) FROM CURRENCY";
                     using (var sqlCommand = new SqlCommand(sqlQuery, conn, transaction))
                     {
                         var reader = await sqlCommand.ExecuteReaderAsync();
@@ -87,6 +87,7 @@ public class CurrencyService : ICurrencyService
                         sqlCommand.Parameters.AddWithValue("@Id", id);
                         sqlCommand.Parameters.AddWithValue("@Name", request.CurrencyName);
                         sqlCommand.Parameters.AddWithValue("@Rate", request.Rate);
+                        
                         if (await sqlCommand.ExecuteNonQueryAsync() == 0)
                             throw new Exception("Failed to insert new currency");
                     }

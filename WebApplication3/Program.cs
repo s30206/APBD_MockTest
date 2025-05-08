@@ -1,3 +1,4 @@
+using Microsoft.IdentityModel.Tokens;
 using WebApplication3.DTO_s;
 using WebApplication3.Interfaces;
 using WebApplication3.Services;
@@ -30,7 +31,7 @@ app.MapPost("/api/currency", async (CurrencyRequestDTO request, ICurrencyService
     try
     {
         var result = await service.AddCurrency(request);
-        return result ? Results.NoContent() : Results.BadRequest();
+        return result ? Results.Created() : Results.BadRequest();
     }
     catch (Exception ex)
     {
@@ -43,7 +44,7 @@ app.MapGet("/api/search", async (string type, string query, ICurrencyService ser
     try
     {
         var result = await service.SearchCurrency(type, query);
-        return result is not null ? Results.Ok(result) : Results.NoContent();
+        return result is not null ? Results.Ok(result) : Results.NotFound();
     }
     catch (Exception ex)
     {
